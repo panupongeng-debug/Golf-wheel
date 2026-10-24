@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golf Drinking Wheel App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1b4332;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #40916c;
+            text-shadow: 2px 2px #081c15;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #b7e4c7;
+            margin-bottom: 25px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .wheel-section {
+            background-color: #2d6a4f;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+        h2 {
+            margin-top: 0;
+            color: #d8f3dc;
+            font-size: 18px;
+            border-bottom: 2px solid #40916c;
+            padding-bottom: 8px;
+        }
+        .wheel-wrapper {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 20px auto;
+        }
+        .pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid #ff4d4d;
+            z-index: 10;
+        }
+        .wheel-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+        .spin-btn {
+            background-color: #ff9f1c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #e67e22;
+            transition: all 0.1s;
+        }
+        .spin-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+        .result-box {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #081c15;
+            border-radius: 8px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #ffeb3b;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>⛳ GOLF DRINKING WHEEL</h1>
+    <div class="subtitle">แอปวงล้อประยุกต์สายดวลเหล้าบนกรีน</div>
+
+    <div class="container">
+        
+        <!-- SECTION 1: วงล้อกฎประจำหลุม -->
+        <div class="wheel-section">
+            <h2>1. วงล้อกฎประจำหลุม (หมุนที่แท่นทีออฟ)</h2>
+            <div class="wheel-wrapper">
+                <div class="pointer"></div>
+                <canvas id="wheel1" class="wheel-canvas" width="260" height="260"></canvas>
+            </div>
+            <button class="spin-btn" onclick="spin(1)">หมุนสุ่มกฎประจำหลุม</button>
+            <div id="result1" class="result-box">กดปุ่มเพื่อสุ่มกฎเมื่อเริ่มหลุมใหม่...</div>
+        </div>
+
+        <!-- SECTION 2: วงล้อทำโทษคนตีพลาด -->
+        <div class="wheel-section">
+            <h2>2. วงล้อทำโทษ (หมุนทันทีเมื่อตีพลาด)</h2>
+            <div class="wheel-wrapper">
+                <div class="pointer"></div>
+                <canvas id="wheel2" class="wheel-canvas" width="260" height="260"></canvas>
+            </div>
+            <button class="spin-btn" onclick="spin(2)" style="background-color: #e63946; box-shadow: 0 4px 0 #b7094c;">ใครพลาด...กดหมุนเลย!</button>
+            <div id="result2" class="result-box">รอคนตีพลาดมาลุ้นบทลงโทษ...</div>
+        </div>
+
+    </div>
+
+    <script>
+        // ข้อมูลตัวเลือกของวงล้อทั้ง 2 แบบ
+        const options1 = [
+            "Social (ดื่มพร้อมกันทั้งก๊วน)", 
+            "Honors (คนแต้มดีสุดหลุมก่อน ต้องดื่ม)", 
+            "Dishonors (คนแต้มบ๊วยหลุมก่อน ต้องดื่ม)", 
+            "First Green (คนออนกรีนแรก สั่งเพื่อนดื่ม)", 
+            "Last Green (คนออนกรีนสุดท้าย ต้องดื่ม)", 
+            "Big Driver (คนไดรฟ์ไกลสุด สั่งเพื่อนดื่ม)", 
+            "Short Game (คนเล่นเกมสั้นห่วยสุด ต้องดื่ม)", 
+            "Worst Score (คนได้แต้มบ๊วยหลุมนี้ ต้องดื่ม)"
+        ];
+
+        const options2 = [
+            "ตีวืด/ลม: ดื่มหนัก 2 อึก! 💨", 
+            "ตกน้ำ/ตกอุปสรรค: ดื่มหนัก 2 อึก! 💧", 
+            "ลูกหาย: ดื่มหนัก 2 อึก! ❌", 
+            "ตกทราย: ดื่ม 1 อึกคอแห้ง ⏳", 
+            "ชนต้นไม้: ดื่ม 1 อึกปลอบใจ 🌲", 
+            "พัตต์ 3 ครั้งขึ้นไป: ดื่ม 1 อึก ⛳", 
+            "หลุดแฟร์เวย์: รอด! สั่งคนอื่นดื่ม 1 อึก 🎯", 
+            "ขอ Mulligan: ยอมดื่ม 1 ช็อตใหญ่เพื่อตีใหม่ 🔄"
+        ];
+
+        const colors = ["#4ea8de", "#56cfe1", "#72efdd", "#80ffdb", "#70e000", "#38b000", "#007200", "#004b23"];
+
+        // ฟังก์ชันวาดวงล้อลงบน Canvas
+        function drawWheel(canvasId, options) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const numOptions = options.length;
+            const arcSize = (2 * Math.PI) / numOptions;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < numOptions; i++) {
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.beginPath();
+                ctx.moveTo(130, 130);
+                ctx.arc(130, 130, 130, i * arcSize, (i + 1) * arcSize);
+                ctx.lineTo(130, 130);
+                ctx.fill();
+
+                // วาดตัวหนังสือข้อความสั้นๆ บนวงล้อ
+                ctx.save();
+                ctx.fillStyle = "#000000";
+                ctx.font = "bold 10px Arial";
+                ctx.translate(130, 130);
+                ctx.rotate(i * arcSize + arcSize / 2);
+                ctx.textAlign = "right";
+                let shortText = options[i].split(" (")[0].split(":")[0];
+                ctx.fillText(shortText, 120, 5);
+                ctx.restore();
+            }
+        }
+
+        // วาดวงล้อตั้งต้น
+        drawWheel('wheel1', options1);
+        drawWheel('wheel2', options2);
+
+        // ตัวแปรเก็บองศาการหมุนปัจจุบัน
+        let currentRotation1 = 0;
+        let currentRotation2 = 0;
+        let isSpinning1 = false;
+        let isSpinning2 = false;
+
+        // ฟังก์ชันสั่งหมุนวงล้อ
+        function spin(wheelNum) {
+            if (wheelNum === 1 && isSpinning1) return;
+            if (wheelNum === 2 && isSpinning2) return;
+
+            const options = wheelNum === 1 ? options1 : options2;
+            const canvas = document.getElementById(`wheel${wheelNum}`);
+            const resultBox = document.getElementById(`result${wheelNum}`);
+            
+            if (wheelNum === 1) isSpinning1 = true; else isSpinning2 = true;
+            resultBox.innerText = "กำลังสุ่มดวง...";
+
+            // สุ่มองศาการหมุนเพิ่ม (อย่างน้อย 5 รอบเพื่อให้หมุนสวยๆ)
+            const numOptions = options.length;
+            const randomDegree = Math.floor(Math.random() * 360);
+            const totalSpin = 1800 + randomDegree; 
+
+            if (wheelNum === 1) {
+                currentRotation1 += totalSpin;
+                canvas.style.transform = `rotate(${currentRotation1}deg)`;
+            } else {
+                currentRotation2 += totalSpin;
+                canvas.style.transform = `rotate(${currentRotation2}deg)`;
+            }
+
+            // รออนิเมชั่นหมุน 4 วินาทีแล้วแสดงผล
+            setTimeout(() => {
+                const finalAngle = (wheelNum === 1 ? currentRotation1 : currentRotation2) % 360;
+                
+                // คำนวณหาช่องที่ชี้ตรงกับเข็มสีแดงด้านบน (เนื่องจากแคนวาสหมุนตามเข็มนาฬิกา)
+                const arcSizeDeg = 360 / numOptions;
+                const correctedAngle = (360 - finalAngle + 270) % 360; 
+                const selectedIndex = Math.floor(correctedAngle / arcSizeDeg) % numOptions;
+
+                resultBox.innerText = "🎉 ผลลัพธ์: " + options[selectedIndex];
+                
+                if (wheelNum === 1) isSpinning1 = false; else isSpinning2 = false;
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

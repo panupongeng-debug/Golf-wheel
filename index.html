@@ -3,446 +3,710 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Golf Drinking Wheel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1b15">
+<title>Premium Golf Drinking Wheel</title>
 <style>
 :root {
-  --bg: #0b1720;
-  --panel: #142630;
-  --green: #32d583;
-  --blue: #54b8ff;
-  --text: #f3f7fa;
-  --muted: #b5c5cf;
+  --bg-color:#0d1b15;
+  --card-bg:#162a22;
+  --accent-neon:#00f5d4;
+  --text-main:#fff;
+  --text-muted:#94a3b8;
+  --btn-grad:linear-gradient(135deg,#00f5d4 0%,#7b2cbf 100%);
 }
-* { box-sizing: border-box; }
+* { box-sizing:border-box; }
 body {
-  margin: 0;
-  padding: 20px 14px 36px;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at top, #1b3940, var(--bg) 65%);
-  color: var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+  background:radial-gradient(ellipse at top,#17382b 0%,var(--bg-color) 58%);
+  color:var(--text-main);
+  margin:0;
+  padding:18px 14px 32px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
 }
-main { max-width: 900px; margin: auto; }
-header { text-align: center; margin-bottom: 22px; }
-h1 { margin: 8px 0; font-size: clamp(26px, 5vw, 42px); }
-.subtitle { color: var(--muted); }
-.wheels {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+.header { text-align:center; margin:4px 0 22px; }
+h1 {
+  font-size:clamp(23px,6vw,30px);
+  font-weight:900;
+  letter-spacing:.5px;
+  margin:0;
+  background:linear-gradient(to right,#00f5d4,#00bbf9);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
 }
-.panel {
-  background: var(--panel);
-  border: 1px solid #31505b;
-  border-radius: 18px;
-  padding: 16px;
-  text-align: center;
-  box-shadow: 0 12px 28px #0003;
+.subtitle {
+  font-size:12px;
+  color:var(--text-muted);
+  margin-top:6px;
+  letter-spacing:.7px;
 }
-.wheel-wrap {
-  width: min(100%, 330px);
-  aspect-ratio: 1;
-  margin: 14px auto;
-  position: relative;
+.container {
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  width:100%;
+  max-width:460px;
 }
-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  filter: drop-shadow(0 5px 12px #0005);
+.wheel-card {
+  background:rgba(22,42,34,.96);
+  border:1px solid #234237;
+  border-radius:24px;
+  padding:20px 16px;
+  box-shadow:0 12px 32px rgba(0,0,0,.38);
+  text-align:center;
+}
+.wheel-card.card-two { border-color:#5b2c91; }
+h2 { margin:0 0 6px; font-size:18px; font-weight:800; }
+.instruction {
+  font-size:12px;
+  color:var(--accent-neon);
+  margin-bottom:12px;
+  line-height:1.5;
+}
+.wheel-wrapper {
+  position:relative;
+  width:min(280px,78vw);
+  aspect-ratio:1;
+  margin:18px auto 20px;
 }
 .pointer {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  top: -4px;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-top: 28px solid #fff;
-  filter: drop-shadow(0 2px 3px #0008);
+  position:absolute;
+  top:-13px;
+  left:50%;
+  transform:translateX(-50%);
+  width:0;
+  height:0;
+  border-left:15px solid transparent;
+  border-right:15px solid transparent;
+  border-top:27px solid #ff0054;
+  z-index:3;
+  filter:drop-shadow(0 3px 4px #0008);
 }
-.result {
-  min-height: 52px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 12px 0;
-  padding: 10px;
-  background: #09151d;
-  border-radius: 10px;
+.wheel-canvas {
+  display:block;
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  border:5px solid #2d4f43;
+  box-shadow:0 0 20px #00f5d426;
+  transform:rotate(0deg);
+  background:#10231b;
 }
-.result strong { color: var(--green); font-size: 20px; }
-.result span { color: var(--muted); font-size: 14px; }
-button {
-  appearance: none;
-  border: 0;
-  border-radius: 12px;
-  padding: 13px 18px;
-  font-size: 16px;
-  font-weight: 750;
-  cursor: pointer;
-  color: #062014;
-  background: var(--green);
-  width: 100%;
-  transition: transform .15s, opacity .15s;
+.spin-btn {
+  background:var(--btn-grad);
+  color:#0d1b15;
+  border:0;
+  padding:14px 22px;
+  font-size:16px;
+  font-weight:900;
+  border-radius:50px;
+  cursor:pointer;
+  box-shadow:0 4px 15px #00f5d44d;
+  width:min(320px,90%);
+  letter-spacing:.2px;
+  touch-action:manipulation;
 }
-button:active { transform: scale(.98); }
-button:disabled { opacity: .5; cursor: wait; }
-button.secondary {
-  color: var(--text);
-  background: #304650;
+.spin-btn:active { transform:scale(.97); }
+.spin-btn:disabled { opacity:.55; cursor:not-allowed; }
+.spin-btn.orange {
+  background:linear-gradient(135deg,#ff0054 0%,#ff5400 100%);
+  color:#fff;
+  box-shadow:0 4px 15px #ff00544d;
 }
-button.blue { background: var(--blue); color: #061c2a; }
+.result-box {
+  margin-top:15px;
+  padding:14px 12px;
+  background:#09130f;
+  border-left:4px solid var(--accent-neon);
+  border-radius:12px;
+  min-height:68px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  font-weight:700;
+  color:#fff;
+  font-size:15px;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+.result-box .result-title { color:var(--accent-neon); font-size:17px; }
+.result-box .result-detail { font-size:13px; font-weight:500; color:#e2e8f0; }
+.result-box .result-detail:empty { display:none; }
 .actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin: 18px 0;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:16px;
 }
-.rules {
-  margin-top: 20px;
-  background: var(--panel);
-  border: 1px solid #31505b;
-  border-radius: 16px;
-  padding: 18px;
+.action-btn {
+  border:1px solid #315447;
+  background:#1b3328;
+  color:#fff;
+  padding:12px 10px;
+  border-radius:12px;
+  font-weight:750;
+  cursor:pointer;
 }
-.rules h2 { margin-top: 0; font-size: 21px; }
-.rule-list { display: grid; gap: 10px; }
-.rule {
-  background: #0c1c24;
-  border-radius: 10px;
-  padding: 12px;
+.action-btn:disabled { opacity:.5; cursor:not-allowed; }
+.footer-note {
+  color:#94a3b8;
+  font-size:11px;
+  text-align:center;
+  margin-top:18px;
+  line-height:1.7;
+  max-width:440px;
 }
-.rule b { color: var(--green); }
-.rule p { margin: 5px 0 0; color: var(--muted); line-height: 1.5; }
-.note {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-  margin-top: 16px;
+.rules-panel {
+  width:100%;
+  max-width:460px;
+  margin-top:22px;
+  padding:17px;
+  background:rgba(22,42,34,.92);
+  border:1px solid #234237;
+  border-radius:18px;
 }
-@media (max-width: 620px) {
-  body { padding: 12px 10px 26px; }
-  .wheels { grid-template-columns: 1fr; }
-  .panel { padding: 13px; }
-  .wheel-wrap { width: min(100%, 310px); }
+.rules-panel h2 { margin-bottom:12px; }
+.rule-group-title {
+  color:var(--accent-neon);
+  font-size:13px;
+  font-weight:900;
+  margin:16px 0 8px;
+}
+.rule-item {
+  padding:10px 11px;
+  background:#0b1b14;
+  border-radius:10px;
+  margin-top:7px;
+}
+.rule-item strong {
+  font-size:13px;
+  color:#fff;
+}
+.rule-item p {
+  font-size:12px;
+  line-height:1.55;
+  color:#cbd5e1;
+  margin:4px 0 0;
+}
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after { scroll-behavior:auto !important; }
 }
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <div style="font-size:38px">🏌️‍♂️ 🍻</div>
-    <h1>Golf Drinking Wheel</h1>
-    <div class="subtitle">Spin the wheel • Accept the challenge</div>
-  </header>
 
-  <section class="wheels">
-    <article class="panel">
-      <h2>🎯 Wheel 1 — Golf Rule</h2>
-      <div class="wheel-wrap">
-        <div class="pointer"></div>
-        <canvas id="wheel1" width="600" height="600"></canvas>
-      </div>
-      <div class="result">
-        <strong id="result1">พร้อมเล่น!</strong>
-        <span id="detail1">หมุนวงล้อเพื่อสุ่มกติกา</span>
-      </div>
-      <button id="spin1" onclick="spinWheel(1)">หมุนวงล้อ 1</button>
-    </article>
+<header class="header">
+  <h1>⛳ GOLF DRINKING APP</h1>
+  <div class="subtitle">PREMIUM EDITION FOR ON-COURSE PARTY</div>
+</header>
 
-    <article class="panel">
-      <h2>🍺 Wheel 2 — Penalty</h2>
-      <div class="wheel-wrap">
-        <div class="pointer"></div>
-        <canvas id="wheel2" width="600" height="600"></canvas>
-      </div>
-      <div class="result">
-        <strong id="result2">พร้อมเล่น!</strong>
-        <span id="detail2">หมุนวงล้อเพื่อสุ่มบทลงโทษ</span>
-      </div>
-      <button class="blue" id="spin2" onclick="spinWheel(2)">หมุนวงล้อ 2</button>
-    </article>
+<main class="container">
+  <section class="wheel-card">
+    <h2>1. กฎประจำหลุม</h2>
+    <div class="instruction">
+      หมุนก่อนเริ่มหลุมเพื่อสุ่มกติกา • อ่านบทลงโทษจากผลด้านล่าง
+    </div>
+    <div class="wheel-wrapper">
+      <div class="pointer" aria-hidden="true"></div>
+      <canvas id="wheel1" class="wheel-canvas" width="560" height="560"
+        aria-label="วงล้อสุ่มกฎประจำหลุม"></canvas>
+    </div>
+    <button id="spinBtn1" class="spin-btn" type="button">สุ่มกฎหลุมนี้</button>
+    <div id="result1" class="result-box" aria-live="polite">
+      <div class="result-title">พร้อมเล่น!</div>
+      <div class="result-detail">กดสุ่มเพื่อเลือกกติกาประจำหลุม</div>
+    </div>
+  </section>
+
+  <section class="wheel-card card-two">
+    <h2>2. วงล้อเช็คบิลคนพลาด</h2>
+    <div class="instruction">
+      จบหลุมแล้วหมุนสุ่มบทลงโทษหรือวิธีเคลียร์ยอดตามข้อตกลงของก๊วน
+    </div>
+    <div class="wheel-wrapper">
+      <div class="pointer" aria-hidden="true"></div>
+      <canvas id="wheel2" class="wheel-canvas" width="560" height="560"
+        aria-label="วงล้อสุ่มบทลงโทษ"></canvas>
+    </div>
+    <button id="spinBtn2" class="spin-btn orange" type="button">หมุนเคลียร์ยอด</button>
+    <div id="result2" class="result-box" aria-live="polite">
+      <div class="result-title">พร้อมเล่น!</div>
+      <div class="result-detail">กดสุ่มเพื่อเลือกบทลงโทษ</div>
+    </div>
   </section>
 
   <div class="actions">
-    <button class="secondary" onclick="spinBoth()">🎲 หมุนทั้งสองวง</button>
-    <button class="secondary" onclick="resetGame()">↻ เริ่มใหม่</button>
+    <button id="spinBothBtn" class="action-btn" type="button">🎲 หมุนทั้งสองวง</button>
+    <button id="resetBtn" class="action-btn" type="button">↻ เริ่มใหม่</button>
   </div>
-
-  <section class="rules">
-    <h2>📋 กติกาและบทลงโทษ</h2>
-    <div class="rule-list" id="ruleList"></div>
-    <p class="note">
-      คำว่า “1 ดื่ม” หมายถึงหนึ่งหน่วยดื่มที่ผู้เล่นตกลงกันก่อนเริ่มเกม
-      ควรกำหนดปริมาณให้ชัดเจน ไม่จำเป็นต้องเป็นเครื่องดื่มแอลกอฮอล์
-      สามารถเลือกเครื่องดื่มไม่มีแอลกอฮอล์แทนได้ ห้ามขับรถหลังดื่ม
-    </p>
-  </section>
 </main>
 
+<section class="rules-panel">
+  <h2>📋 รายละเอียดกติกา</h2>
+  <div class="rule-group-title">WHEEL 1 — GOLF RULE</div>
+  <div id="rules1"></div>
+  <div class="rule-group-title">WHEEL 2 — PENALTY</div>
+  <div id="rules2"></div>
+</section>
+
+<div class="footer-note">
+  เล่นเพื่อความสนุกเท่านั้น • “1 ดื่ม” หมายถึงหนึ่งหน่วยดื่มที่ก๊วนตกลงกันก่อนเริ่มเกม
+  ทุกคนสามารถเลือกเครื่องดื่มไม่มีแอลกอฮอล์หรือบทลงโทษทางเลือกได้
+  เคารพสิทธิ์ของผู้เล่นที่ไม่ต้องการดื่ม และห้ามขับรถหลังดื่ม
+</div>
+
 <script>
-const rules1 = [
-  {
-    name: "SOCIAL",
-    detail: "ผู้เล่นทุกคนดื่มคนละ 1 ดื่ม"
-  },
-  {
-    name: "HONORS",
-    detail: "ผู้ที่ได้ Honors จากหลุมก่อนหน้า ดื่ม 1 ดื่ม"
-  },
-  {
-    name: "DISHONORS",
-    detail: "ผู้ที่ทำคะแนนแย่ที่สุดในหลุมก่อนหน้า ดื่ม 1 ดื่ม"
-  },
-  {
-    name: "FIRST GREEN",
-    detail: "ผู้ที่ตีขึ้น Green ได้เป็นคนแรก เลือกผู้เล่น 1 คนให้ดื่ม 1 ดื่ม"
-  },
-  {
-    name: "LAST GREEN",
-    detail: "ผู้ที่ตีขึ้น Green ได้เป็นคนสุดท้าย ดื่ม 1 ดื่ม"
-  },
-  {
-    name: "BIG DRIVER",
-    detail: "ผู้ที่ตีไกลที่สุดและลูกอยู่ใน Fairway เลือกผู้เล่น 1 คนให้ดื่ม 1 ดื่ม"
-  },
-  {
-    name: "SHORT GAME",
-    detail: "ผู้ที่เล่นลูกสั้นรอบ Green ได้แย่ที่สุด ดื่ม 1 ดื่ม"
-  },
-  {
-    name: "WORST SCORE",
-    detail: "ผู้ที่ใช้จำนวน Stroke มากที่สุดในหลุมนี้ ดื่ม 1 ดื่ม"
-  }
+"use strict";
+
+/* =========================================
+   WHEEL 1: GOLF RULE
+   ========================================= */
+
+const options1 = [
+  "SOCIAL",
+  "HONORS",
+  "DISHONORS",
+  "1st GREEN",
+  "LAST GREEN",
+  "DRIVE ไกล",
+  "เกมสั้นบ๊วย",
+  "แต้มบ๊วย"
 ];
 
-const rules2 = [
-  {
-    name: "DOUBLE",
-    detail: "จำนวนดื่มที่ต้องรับเพิ่มเป็น 2 เท่าจากจำนวนเดิม"
-  },
-  {
-    name: "HALF",
-    detail: "ลดจำนวนดื่มลงครึ่งหนึ่ง เศษปัดขึ้น"
-  },
-  {
-    name: "SAFE",
-    detail: "รอดจากบทลงโทษในรอบนี้ ไม่ต้องดื่ม"
-  },
-  {
-    name: "FRIEND PAYS",
-    detail: "เลือกเพื่อนที่ยินยอมดื่มแทน โดยดื่มตามจำนวนที่ต้องรับ"
-  },
-  {
-    name: "EVERYONE",
-    detail: "ผู้เล่นทุกคนดื่มคนละ 1 ดื่มต่อหนึ่งหน่วยบทลงโทษ"
-  },
-  {
-    name: "ONE DRINK",
-    detail: "บทลงโทษครั้งนี้เท่ากับ 1 ดื่มถ้วน"
-  },
-  {
-    name: "MULLIGAN",
-    detail: "หากใช้ Mulligan ให้เพิ่มจำนวนดื่มเป็น 2 เท่า"
-  },
-  {
-    name: "ALL IN",
-    detail: "รับผิดชอบจำนวนดื่มทั้งหมดตามยอดที่ผู้เล่นตกลงกันไว้"
-  }
+const fullDetails1 = {
+  "SOCIAL":
+    "ผู้เล่นทุกคนในก๊วนดื่มคนละ 1 ดื่มพร้อมกัน",
+
+  "HONORS":
+    "ผู้ที่ได้ Honors จากหลุมก่อนหน้า ดื่ม 1 ดื่ม หากคะแนนดีที่สุดเสมอกัน ให้ใช้ลำดับ Honors ที่ก๊วนตกลงกัน",
+
+  "DISHONORS":
+    "ผู้ที่ใช้จำนวน Stroke มากที่สุดในหลุมก่อนหน้า ดื่ม 1 ดื่ม หากเสมอกัน ทุกคนที่เสมอกันดื่มคนละ 1 ดื่ม",
+
+  "1st GREEN":
+    "ผู้ที่ตีลูกขึ้น Green ได้เป็นคนแรก เลือกผู้เล่นคนอื่น 1 คนให้ดื่ม 1 ดื่ม หากขึ้นพร้อมกันให้ตกลงกันหรือสุ่ม",
+
+  "LAST GREEN":
+    "ผู้ที่ตีลูกขึ้น Green เป็นคนสุดท้าย ดื่ม 1 ดื่ม หากขึ้นพร้อมกันให้ทุกคนที่เสมอกันดื่มคนละ 1 ดื่ม",
+
+  "DRIVE ไกล":
+    "ผู้ที่ไดรฟ์ได้ไกลที่สุดและลูกหยุดใน Fairway เลือกผู้เล่นคนอื่น 1 คนให้ดื่ม 1 ดื่ม หากไม่มีลูกอยู่ใน Fairway ให้ใช้เกณฑ์สำรองที่ก๊วนตกลงกัน",
+
+  "เกมสั้นบ๊วย":
+    "ผู้ที่เล่นเกมสั้นรอบ Green ได้แย่ที่สุด ดื่ม 1 ดื่ม หากตัดสินไม่ได้ให้ถือว่าเสมอ และผู้ที่เสมอกันดื่มคนละ 1 ดื่ม",
+
+  "แต้มบ๊วย":
+    "ผู้ที่ใช้จำนวน Stroke จริงมากที่สุดในหลุมนี้ ดื่ม 1 ดื่ม หากเสมอกัน ทุกคนที่เสมอกันดื่มคนละ 1 ดื่ม"
+};
+
+/* =========================================
+   WHEEL 2: PENALTY / SETTLEMENT
+   ========================================= */
+
+const options2 = [
+  "เหมาหมด",
+  "รอดตัว",
+  "คูณสอง",
+  "หารครึ่ง",
+  "เพื่อนดื่มแทน",
+  "โดนเท่ากัน",
+  "1 ดื่มถ้วน",
+  "MULLIGAN"
 ];
+
+const fullDetails2 = {
+  "เหมาหมด":
+    "รับผิดชอบจำนวนดื่มทั้งหมดตามยอดที่คำนวณไว้และข้อตกลงของก๊วน",
+
+  "รอดตัว":
+    "ยกเว้นบทลงโทษจากยอดที่ต้องรับในรอบนี้ ไม่ต้องดื่ม",
+
+  "คูณสอง":
+    "จำนวนดื่มที่ต้องรับเพิ่มเป็น 2 เท่าของจำนวนเดิม",
+
+  "หารครึ่ง":
+    "ลดจำนวนดื่มลงเหลือครึ่งหนึ่งของจำนวนเดิม เศษปัดขึ้น",
+
+  "เพื่อนดื่มแทน":
+    "เลือกเพื่อนที่ยินยอมดื่มแทน โดยเพื่อนรับจำนวนดื่มเท่ากับยอดที่ต้องรับ",
+
+  "โดนเท่ากัน":
+    "ผู้เล่นทุกคนดื่มคนละ 1 ดื่มต่อหนึ่งหน่วยบทลงโทษ",
+
+  "1 ดื่มถ้วน":
+    "บทลงโทษครั้งนี้เท่ากับ 1 ดื่มถ้วน",
+
+  "MULLIGAN":
+    "หากใช้ Mulligan ให้เพิ่มจำนวนดื่มเป็น 2 เท่าของจำนวนเดิม"
+};
+
+/* =========================================
+   WHEEL SETTINGS & AUDIO
+   ========================================= */
 
 const colors = [
-  "#24b47e", "#f4b942", "#438ee8", "#e76f51",
-  "#9b6bdf", "#27b6b0", "#e65c93", "#718096"
+  "#00f5d4",
+  "#7b2cbf",
+  "#00bbf9",
+  "#9b5de5",
+  "#fee440",
+  "#f15bb5",
+  "#3a86c8",
+  "#ff0054"
 ];
 
-let selected1 = null;
-let selected2 = null;
-let spinning = [false, false];
-let angles = [0, 0];
-let audioContext = null;
+const wheelStates = {
+  1: { rotation: 0, spinning: false, lastIndex: -1, spinToken: 0 },
+  2: { rotation: 0, spinning: false, lastIndex: -1, spinToken: 0 }
+};
 
-function drawWheel(canvasId, items, rotation) {
+let audioCtx = null;
+let soundEnabled = true;
+
+function safeInitAudio() {
+  try {
+    if (!audioCtx) {
+      const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return null;
+      audioCtx = new AudioContextClass();
+    }
+
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume().catch(() => {});
+    }
+
+    return audioCtx;
+  } catch (_) {
+    return null;
+  }
+}
+
+function playTone(
+  frequency,
+  duration = 0.05,
+  volume = 0.035,
+  type = "triangle"
+) {
+  if (!soundEnabled) return;
+
+  const ctx = safeInitAudio();
+  if (!ctx) return;
+
+  try {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(frequency, ctx.currentTime);
+    gain.gain.setValueAtTime(volume, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      ctx.currentTime + duration
+    );
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  } catch (_) {}
+}
+
+function playWinSound() {
+  if (!soundEnabled) return;
+
+  playTone(587, 0.18, 0.07, "sine");
+
+  window.setTimeout(() => {
+    playTone(880, 0.25, 0.06, "sine");
+  }, 100);
+}
+
+/* =========================================
+   DRAW WHEEL
+   ========================================= */
+
+function drawWheel(canvasId, options) {
   const canvas = document.getElementById(canvasId);
+  if (!canvas || !options.length) return;
+
   const ctx = canvas.getContext("2d");
-  const cx = canvas.width / 2;
-  const cy = canvas.height / 2;
-  const radius = canvas.width * 0.46;
-  const slice = (Math.PI * 2) / items.length;
+  if (!ctx) return;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const size = canvas.width;
+  const center = size / 2;
+  const radius = center - 3;
+  const arc = (2 * Math.PI) / options.length;
 
-  items.forEach((item, i) => {
-    const start = rotation + i * slice - Math.PI / 2;
-    const end = start + slice;
+  ctx.clearRect(0, 0, size, size);
+
+  for (let i = 0; i < options.length; i++) {
+    const start = -Math.PI / 2 + i * arc;
+    const end = start + arc;
+    const color = colors[i % colors.length];
 
     ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.arc(cx, cy, radius, start, end);
+    ctx.moveTo(center, center);
+    ctx.arc(center, center, radius, start, end);
     ctx.closePath();
-    ctx.fillStyle = colors[i % colors.length];
+    ctx.fillStyle = color;
     ctx.fill();
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = "rgba(255,255,255,.72)";
+    ctx.lineWidth = 2;
     ctx.stroke();
 
     ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(start + slice / 2);
+    ctx.translate(center, center);
+    ctx.rotate(start + arc / 2);
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 23px system-ui";
-    ctx.shadowColor = "#0008";
-    ctx.shadowBlur = 3;
 
-    let label = item.name;
-    if (label.length > 14) label = label.slice(0, 13) + "…";
-    ctx.fillText(label, radius - 22, 0);
+    ctx.fillStyle =
+      color === "#fee440" || color === "#00f5d4"
+        ? "#101820"
+        : "#ffffff";
+
+    const label = options[i];
+    const fontSize =
+      label.length > 11 ? 19 :
+      label.length > 8 ? 22 : 26;
+
+    ctx.font = `800 ${fontSize}px Arial, sans-serif`;
+    ctx.shadowColor = "rgba(0,0,0,.2)";
+    ctx.shadowBlur = 2;
+    ctx.fillText(label, radius - 20, 0, radius * 0.76);
     ctx.restore();
-  });
+  }
 
   ctx.beginPath();
-  ctx.arc(cx, cy, radius * 0.13, 0, Math.PI * 2);
+  ctx.arc(center, center, 27, 0, Math.PI * 2);
   ctx.fillStyle = "#ffffff";
   ctx.fill();
-  ctx.strokeStyle = "#173b32";
-  ctx.lineWidth = 7;
+  ctx.strokeStyle = "#0d1b15";
+  ctx.lineWidth = 5;
   ctx.stroke();
 
-  ctx.fillStyle = "#14342c";
-  ctx.font = "bold 25px system-ui";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("GOLF", cx, cy);
+  ctx.beginPath();
+  ctx.arc(center, center, 8, 0, Math.PI * 2);
+  ctx.fillStyle = "#00f5d4";
+  ctx.fill();
 }
 
-function playTick() {
-  try {
-    audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    oscillator.type = "sine";
-    oscillator.frequency.value = 620;
-    gain.gain.setValueAtTime(0.08, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.07);
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.07);
-  } catch (e) {
-    // เสียงไม่พร้อมใช้งานก็ยังเล่นเกมได้ตามปกติ
-  }
+/* =========================================
+   RESULT DISPLAY
+   ========================================= */
+
+function setResult(id, title, detail) {
+  const box = document.getElementById(`result${id}`);
+  if (!box) return;
+
+  box.replaceChildren();
+
+  const titleEl = document.createElement("div");
+  titleEl.className = "result-title";
+  titleEl.textContent = title;
+
+  const detailEl = document.createElement("div");
+  detailEl.className = "result-detail";
+  detailEl.textContent = detail || "";
+
+  box.append(titleEl, detailEl);
 }
 
-function spinWheel(which) {
-  const index = which - 1;
-  if (spinning[index]) return;
+/* =========================================
+   SPIN WHEEL
+   ========================================= */
 
-  const items = which === 1 ? rules1 : rules2;
-  const canvasId = "wheel" + which;
-  const button = document.getElementById("spin" + which);
-  const result = document.getElementById("result" + which);
-  const detail = document.getElementById("detail" + which);
+function spin(id) {
+  const state = wheelStates[id];
 
-  spinning[index] = true;
+  if (!state || state.spinning) return;
+
+  const options = id === 1 ? options1 : options2;
+  const details = id === 1 ? fullDetails1 : fullDetails2;
+  const canvas = document.getElementById(`wheel${id}`);
+  const button = document.getElementById(`spinBtn${id}`);
+
+  if (!canvas || !button || !options.length) return;
+
+  state.spinning = true;
+  state.spinToken += 1;
+
+  const token = state.spinToken;
   button.disabled = true;
-  result.querySelector("strong").textContent = "กำลังหมุน…";
-  detail.textContent = "ลุ้นผลกันเลย!";
+  button.textContent = "กำลังหมุน...";
 
-  const slice = (Math.PI * 2) / items.length;
-  const targetIndex = Math.floor(Math.random() * items.length);
-  const current = angles[index];
-  const normalized = ((current % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-  const targetMod = ((-targetIndex * slice - slice / 2) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
-  const extra = 5 + Math.floor(Math.random() * 3);
-  const finalAngle = current + extra * Math.PI * 2 +
-    ((targetMod - normalized + Math.PI * 2) % (Math.PI * 2));
+  setResult(id, "กำลังหมุน...", "รอลุ้นผลการสุ่ม");
+  safeInitAudio();
 
+  let selectedIndex = Math.floor(Math.random() * options.length);
+
+  // ป้องกันผลซ้ำติดกัน ถ้ามีตัวเลือกมากกว่าหนึ่งรายการ
+  if (options.length > 1 && selectedIndex === state.lastIndex) {
+    selectedIndex = (selectedIndex + 1) % options.length;
+  }
+
+  state.lastIndex = selectedIndex;
+
+  const segmentDegrees = 360 / options.length;
+  const centerOfSegment =
+    selectedIndex * segmentDegrees + segmentDegrees / 2;
+
+  // ตำแหน่งเป้าหมาย: ให้กลางช่องที่เลือกอยู่ใต้ลูกศรด้านบน
+  const targetMod = (360 - centerOfSegment) % 360;
+  const currentMod =
+    ((state.rotation % 360) + 360) % 360;
+
+  const adjustment =
+    (targetMod - currentMod + 360) % 360;
+
+  const extraTurns = 5 + Math.floor(Math.random() * 3);
+  const startRotation = state.rotation;
+  const endRotation =
+    startRotation + extraTurns * 360 + adjustment;
+
+  state.rotation = endRotation;
+
+  const duration = 4000;
   const startTime = performance.now();
-  const duration = 3600;
-  const startAngle = current;
+  let lastTick = 0;
 
-  function animate(now) {
-    const progress = Math.min((now - startTime) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 4);
-    angles[index] = startAngle + (finalAngle - startAngle) * eased;
-    drawWheel(canvasId, items, angles[index]);
+  canvas.style.transition = "none";
+  canvas.style.transform = `rotate(${startRotation}deg)`;
 
-    if (progress < 1) {
-      if (Math.random() < 0.15) playTick();
-      requestAnimationFrame(animate);
-    } else {
-      angles[index] = finalAngle;
-      drawWheel(canvasId, items, angles[index]);
+  // บังคับให้ browser รับตำแหน่งเริ่มต้นก่อนเริ่มแอนิเมชัน
+  void canvas.offsetWidth;
 
-      const normalizedFinal = ((finalAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-      const pointerAngle = ((-normalizedFinal % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-      const landedIndex = Math.floor(pointerAngle / slice) % items.length;
-      const item = items[landedIndex];
+  canvas.style.transition =
+    `transform ${duration}ms cubic-bezier(.1,.8,.2,1)`;
+  canvas.style.transform = `rotate(${endRotation}deg)`;
 
-      if (which === 1) selected1 = item;
-      else selected2 = item;
+  function tick(now) {
+    if (!state.spinning || state.spinToken !== token) return;
 
-      result.querySelector("strong").textContent = item.name;
-      detail.textContent = item.detail;
-      spinning[index] = false;
-      button.disabled = false;
-      playTick();
+    const elapsed = now - startTime;
+    const interval = 55 + Math.min(220, elapsed / 12);
+
+    if (now - lastTick >= interval) {
+      playTone(520 + Math.random() * 180, 0.03, 0.015);
+      lastTick = now;
+    }
+
+    if (elapsed < duration) {
+      requestAnimationFrame(tick);
     }
   }
 
-  requestAnimationFrame(animate);
+  requestAnimationFrame(tick);
+
+  let finished = false;
+
+  function finish() {
+    if (finished || state.spinToken !== token) return;
+    finished = true;
+
+    state.spinning = false;
+    button.disabled = false;
+    button.textContent =
+      id === 1 ? "สุ่มกฎหลุมนี้" : "หมุนเคลียร์ยอด";
+
+    setResult(
+      id,
+      options[selectedIndex],
+      details[options[selectedIndex]]
+    );
+
+    playWinSound();
+  }
+
+  const onTransitionEnd = (event) => {
+    if (event.propertyName !== "transform") return;
+    canvas.removeEventListener("transitionend", onTransitionEnd);
+    finish();
+  };
+
+  canvas.addEventListener("transitionend", onTransitionEnd);
+
+  // สำรองกรณี browser ไม่ส่ง transitionend
+  window.setTimeout(() => {
+    canvas.removeEventListener("transitionend", onTransitionEnd);
+    finish();
+  }, duration + 500);
 }
 
-function spinBoth() {
-  spinWheel(1);
-  spinWheel(2);
+/* =========================================
+   RESET & RULE LIST
+   ========================================= */
+
+function renderRuleList(containerId, options, details) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.replaceChildren();
+
+  options.forEach((option) => {
+    const item = document.createElement("div");
+    item.className = "rule-item";
+
+    const title = document.createElement("strong");
+    title.textContent = option;
+
+    const description = document.createElement("p");
+    description.textContent = details[option] || "";
+
+    item.append(title, description);
+    container.appendChild(item);
+  });
 }
 
 function resetGame() {
-  if (spinning.some(Boolean)) return;
+  if (wheelStates[1].spinning || wheelStates[2].spinning) return;
 
-  selected1 = null;
-  selected2 = null;
-  angles = [0, 0];
+  [1, 2].forEach((id) => {
+    const state = wheelStates[id];
+    const canvas = document.getElementById(`wheel${id}`);
 
-  document.getElementById("result1").querySelector("strong").textContent = "พร้อมเล่น!";
-  document.getElementById("detail1").textContent = "หมุนวงล้อเพื่อสุ่มกติกา";
-  document.getElementById("result2").querySelector("strong").textContent = "พร้อมเล่น!";
-  document.getElementById("detail2").textContent = "หมุนวงล้อเพื่อสุ่มบทลงโทษ";
+    state.rotation = 0;
+    state.lastIndex = -1;
+    state.spinToken += 1;
 
-  drawWheel("wheel1", rules1, angles[0]);
-  drawWheel("wheel2", rules2, angles[1]);
+    canvas.style.transition = "none";
+    canvas.style.transform = "rotate(0deg)";
+  });
+
+  setResult(1, "พร้อมเล่น!", "กดสุ่มเพื่อเลือกกติกาประจำหลุม");
+  setResult(2, "พร้อมเล่น!", "กดสุ่มเพื่อเลือกบทลงโทษ");
+
+  drawWheel("wheel1", options1);
+  drawWheel("wheel2", options2);
 }
 
-function renderRules() {
-  const container = document.getElementById("ruleList");
-  const allRules = [
-    { title: "Wheel 1 — Golf Rule", items: rules1 },
-    { title: "Wheel 2 — Penalty", items: rules2 }
-  ];
+/* =========================================
+   EVENT LISTENERS & STARTUP
+   ========================================= */
 
-  container.innerHTML = allRules.map(group => `
-    <div class="rule">
-      <b>${group.title}</b>
-    </div>
-    ${group.items.map(item => `
-      <div class="rule">
-        <b>${item.name}</b>
-        <p>${item.detail}</p>
-      </div>
-    `).join("")}
-  `).join("");
-}
+document.getElementById("spinBtn1").addEventListener("click", () => spin(1));
+document.getElementById("spinBtn2").addEventListener("click", () => spin(2));
 
-drawWheel("wheel1", rules1, angles[0]);
-drawWheel("wheel2", rules2, angles[1]);
-renderRules();
+document.getElementById("spinBothBtn").addEventListener("click", () => {
+  spin(1);
+  spin(2);
+});
+
+document.getElementById("resetBtn").addEventListener("click", resetGame);
+
+drawWheel("wheel1", options1);
+drawWheel("wheel2", options2);
+
+renderRuleList("rules1", options1, fullDetails1);
+renderRuleList("rules2", options2, fullDetails2);
 </script>
 </body>
 </html>

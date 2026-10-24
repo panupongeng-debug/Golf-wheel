@@ -3,168 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golf Drinking Wheel - On Course</title>
+    <title>Premium Golf Drinking Wheel</title>
     <style>
+        :root {
+            --bg-color: #0d1b15;
+            --card-bg: #162a22;
+            --primary-neon: #390099;
+            --accent-neon: #00f5d4;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --btn-grad: linear-gradient(135deg, #00f5d4 0%, #7b2cbf 100%);
+        }
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #1b4332;
-            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
             padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
         }
         h1 {
-            color: #40916c;
-            text-shadow: 2px 2px #081c15;
-            margin: 5px 0 0 0;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #00f5d4, #00bbf9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
         }
         .subtitle {
-            font-size: 12px;
-            color: #b7e4c7;
-            margin-bottom: 15px;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 5px;
         }
         .container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
             width: 100%;
-            max-width: 450px;
+            max-width: 440px;
         }
-        .wheel-section {
-            background-color: #2d6a4f;
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        .wheel-card {
+            background-color: var(--card-bg);
+            border: 1px solid #234237;
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
+            position: relative;
         }
         h2 {
-            margin-top: 0;
-            color: #d8f3dc;
-            font-size: 16px;
-            border-bottom: 2px solid #40916c;
-            padding-bottom: 6px;
+            margin: 0 0 5px 0;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
         }
         .instruction {
             font-size: 12px;
-            color: #ffeb3b;
-            margin-bottom: 10px;
-            font-style: italic;
+            color: var(--accent-neon);
+            margin-bottom: 15px;
+            opacity: 0.9;
         }
         .wheel-wrapper {
             position: relative;
-            width: 240px;
-            height: 240px;
-            margin: 10px auto;
+            width: 280px;
+            height: 280px;
+            margin: 15px auto;
         }
         .pointer {
             position: absolute;
-            top: -12px;
+            top: -15px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 20px solid #ff4d4d;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            border-top: 28px solid #ff0054;
             z-index: 10;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
         }
         .wheel-canvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
+            border: 5px solid #2d4f43;
+            box-shadow: 0 0 20px rgba(0, 245, 212, 0.15);
             transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
         }
         .spin-btn {
-            background-color: #ff9f1c;
-            color: white;
+            background: var(--btn-grad);
+            color: #0d1b15;
             border: none;
-            padding: 10px 25px;
-            font-size: 15px;
-            font-weight: bold;
-            border-radius: 25px;
+            padding: 14px 35px;
+            font-size: 16px;
+            font-weight: 800;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 0 #e67e22;
+            box-shadow: 0 4px 15px rgba(0, 245, 212, 0.3);
+            transition: all 0.2s ease;
+            width: 80%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .spin-btn:active {
-            transform: translateY(4px);
+            transform: scale(0.96);
             box-shadow: none;
         }
         .result-box {
-            margin-top: 12px;
-            padding: 10px;
-            background-color: #081c15;
-            border-radius: 8px;
-            min-height: 35px;
+            margin-top: 15px;
+            padding: 14px;
+            background-color: #09130f;
+            border-left: 4px solid var(--accent-neon);
+            border-radius: 12px;
+            min-height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: #ffeb3b;
-            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 16px;
+        }
+        .highlight-res {
+            color: var(--accent-neon);
+            font-size: 17px;
+            margin-left: 5px;
         }
     </style>
 </head>
 <body>
 
-    <h1>⛳ GOLF DRINKING WHEEL</h1>
-    <div class="subtitle">เวอร์ชันเล่นจริงในสนาม ไม่ถ่วงเวลาเกม</div>
+    <div class="header">
+        <h1>⛳ GOLF DRINKING APP</h1>
+        <div class="subtitle">PREMIUM EDITION FOR ON-COURSE PARTY</div>
+    </div>
 
     <div class="container">
         
-        <!-- วงล้อที่ 1: หมุนก่อนเริ่มหลุม -->
-        <div class="wheel-section">
-            <h2>1. กฎประจำหลุม (หมุนที่แท่นทีออฟ)</h2>
-            <div class="instruction">หมุนเพื่อหาเงื่อนไขพิเศษประจำหลุมนี้</div>
+        <!-- CARD 1: กฎประจำหลุม -->
+        <div class="wheel-card">
+            <h2>1. กฎประจำหลุม</h2>
+            <div class="instruction">หมุนที่แท่นทีออฟเพื่อเริ่มกติกากลาง</div>
             <div class="wheel-wrapper">
                 <div class="pointer"></div>
-                <canvas id="wheel1" class="wheel-canvas" width="240" height="240"></canvas>
+                <canvas id="wheel1" class="wheel-canvas" width="280" height="280"></canvas>
             </div>
-            <button class="spin-btn" onclick="spin(1)">สุ่มกฎประจำหลุม</button>
-            <div id="result1" class="result-box">หมุนเมื่อเริ่มหลุมใหม่...</div>
+            <button class="spin-btn" onclick="spin(1)">สุ่มกฎหลุมนี้</button>
+            <div id="result1" class="result-box">เตรียมตัวสุ่มดวง...</div>
         </div>
 
-        <!-- วงล้อที่ 2: ปรับใหม่เป็น เคลียร์บิลตอนจบหลุม -->
-        <div class="wheel-section">
-            <h2>2. วงล้อเคลียร์บิล (หมุนตอนจบหลุมบนรถกอล์ฟ)</h2>
-            <div class="instruction">ใครที่มีแต้มเสียในหลุมนี้ (ตกน้ำ/ทราย/พัตต์3) มาหมุนวัดดวง</div>
+        <!-- CARD 2: เคลียร์บิลตอนจบหลุม -->
+        <div class="wheel-card" style="border-color: #4c1d95;">
+            <h2>2. วงล้อเช็คบิลคนพลาด</h2>
+            <div class="instruction">จบหลุมแล้ว ใครมีแต้มเสียให้มาหมุนรับโทษ</div>
             <div class="wheel-wrapper">
                 <div class="pointer"></div>
-                <canvas id="wheel2" class="wheel-canvas" width="240" height="240"></canvas>
+                <canvas id="wheel2" class="wheel-canvas" width="280" height="280"></canvas>
             </div>
-            <button class="spin-btn" onclick="spin(2)" style="background-color: #e63946; box-shadow: 0 4px 0 #b7094c;">คนตีพลาด...หมุนรับโทษ!</button>
-            <div id="result2" class="result-box">จบหลุมแล้ว ค่อยมาหมุนเคลียร์ยอดดื่มกัน...</div>
+            <button class="spin-btn" onclick="spin(2)" style="background: linear-gradient(135deg, #ff0054 0%, #ff5400 100%); box-shadow: 0 4px 15px rgba(255, 0, 84, 0.3);">หมุนเคลียร์ยอด</button>
+            <div id="result2" class="result-box">รอนับยอดเสียท้ายหลุม...</div>
         </div>
 
     </div>
 
     <script>
-        const options1 = [
-            "Social (ดื่มพร้อมกันทุกคน)", 
-            "Honors (คนตีคนแรกดื่มฉลอง)", 
-            "Dishonors (บ๊วยหลุมก่อนดื่มปลอบใจ)", 
-            "First Green (ออนแรกสั่งเพื่อนดื่ม)", 
-            "Last Green (ออนช้าสุดต้องดื่ม)", 
-            "Big Driver (ไดรฟ์ไกลสุดสั่งเพื่อนดื่ม)", 
-            "Short Game (เกมสั้นห่วยสุดดื่ม)", 
-            "Worst Score (แต้มบ๊วยหลุมนี้ดื่ม)"
-        ];
+        // ใช้ชื่อย่อและตัดคำสั้นๆ เพื่อให้ในวงล้อใช้ฟอนต์ขนาดใหญ่พิเศษได้
+        const options1 = ["SOCIAL", "HONORS", "DISHONORS", "1st GREEN", "LAST GREEN", "DRIVE ไกล", "เกมสั้นบ๊วย", "แต้มบ๊วย"];
+        const fullDetails1 = {
+            "SOCIAL": "Social ดื่มพร้อมกันทุกคน!",
+            "HONORS": "Honors คนตีคนแรกดื่มฉลองความเทพ",
+            "DISHONORS": "Dishonors คนบ๊วยหลุมก่อนดื่มย้อมใจ",
+            "1st GREEN": "First Green ออนแรกสั่งเพื่อนดื่ม!",
+            "LAST GREEN": "Last Green ออนช้าสุดโดนบังคับดื่ม",
+            "DRIVE ไกล": "Big Driver ไดรฟ์ไกลสุดสั่งเพื่อนดื่ม",
+            "เกมสั้นบ๊วย": "Short Game เกมสั้นห่วยสุดรอบกรีนต้องดื่ม",
+            "แต้มบ๊วย": "Worst Score แต้มบ๊วยหลุมนี้ดื่มเต็มๆ"
+        };
 
-        // ปรับบทลงโทษให้เคลียร์ง่ายตามจำนวนความผิดพลาดที่สะสมมาในหลุมนั้น
-        const options2 = [
-            "เหมาหมด: ดื่มตามจำนวนครั้งที่พลาด 🍻", 
-            "รอดปาฏิหาริย์: หลุมนี้ยกโทษให้ ไม่ต้องดื่ม! 🎉", 
-            "คูณสอง: มีความผิดกี่ครั้ง คูณ 2 อึก! 💀", 
-            "หารครึ่ง: ปัดเศษทิ้ง ดื่มแค่ครึ่งเดียวของที่พลาด 📉", 
-            "รับผิดแทน: สั่งเพื่อนในก๊วนดื่มแทนตามจำนวนที่เราพลาด 🎯", 
-            "โดนเท่ากัน: ทุกคนในก๊วนร่วมใจดื่มเท่าจำนวนที่เราพลาด 🤝", 
-            "ดื่มพื้นฐาน: ดื่ม 1 อึกถ้วน ไม่สนใจว่าพลาดกี่ครั้ง 👍", 
-            "จ่ายค่า Mulligan: ถ้าหลุมนี้มีการตีใหม่ ดื่มเบิ้ล 2 เท่า 🔄"
-        ];
+        const options2 = ["เหมาหมด", "รอดตัว", "คูณสอง", "หารครึ่ง", "เพื่อนดื่มแทน", "โดนเท่ากัน", "1 อึกถ้วน", "MULLIGAN"];
+        const fullDetails2 = {
+            "เหมาหมด": "เหมาหมด! ดื่มตามจำนวนครั้งที่พลาด 🍻",
+            "รอดตัว": "รอดปาฏิหาริย์! หลุมนี้ยกโทษให้รอดตัว 🎉",
+            "คูณสอง": "คูณสอง! มีความผิดกี่ครั้งคูณ 2 อึก 💀",
+            "หารครึ่ง": "หารครึ่ง! ดื่มครึ่งเดียวของที่พลาด 📉",
+            "เพื่อนดื่มแทน": "เพื่อนซวย! สั่งเพื่อนดื่มแทนตามยอดที่เราพลาด 🎯",
+            "โดนเท่ากัน": "โดนคู่! ทุกคนในก๊วนดื่มเท่าจำนวนที่เราพลาด 🤝",
+            "1 อึกถ้วน": "ดื่มพื้นฐาน! โดนแค่ 1 อึกถ้วนพอ 👍",
+            "MULLIGAN": "Mulligan! ถ้าหลุมนี้ตีใหม่ โดนเบิ้ล 2 เท่า 🔄"
+        };
 
-        const colors = ["#4ea8de", "#56cfe1", "#72efdd", "#80ffdb", "#70e000", "#38b000", "#007200", "#004b23"];
+        // ชุดสีพรีเมียม สลับมืดสว่างเพื่อให้มองเห็นง่าย
+        const colors = ["#00f5d4", "#7b2cbf", "#00bbf9", "#9b5de5", "#fee440", "#f15bb5", "#3a86c8", "#ff0054"];
+
+        // ระบบเสียงสังเคราะห์ Web Audio API (ไม่ต้องโหลดไฟล์เสียงจากภายนอก)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playTickSound() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        function playWinSound(isEpic) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(isEpic ? 880 : 587, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(isEpic ? 1760 : 880, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        }
 
         function drawWheel(canvasId, options) {
             const canvas = document.getElementById(canvasId);
@@ -177,19 +243,19 @@
             for (let i = 0; i < numOptions; i++) {
                 ctx.fillStyle = colors[i % colors.length];
                 ctx.beginPath();
-                ctx.moveTo(120, 120);
-                ctx.arc(120, 120, 120, i * arcSize, (i + 1) * arcSize);
-                ctx.lineTo(120, 120);
+                ctx.moveTo(140, 140);
+                ctx.arc(140, 140, 140, i * arcSize, (i + 1) * arcSize);
+                ctx.lineTo(140, 140);
                 ctx.fill();
 
+                // ปรับแต่งฟอนต์บนหน้าวงล้อให้ "ใหญ่ หนา ชัด"
                 ctx.save();
-                ctx.fillStyle = "#000000";
-                ctx.font = "bold 9px Arial";
-                ctx.translate(120, 120);
+                ctx.fillStyle = (colors[i % colors.length] === "#fee440" || colors[i % colors.length] === "#00f5d4") ? "#000000" : "#ffffff";
+                ctx.font = "bold 15px Arial";
+                ctx.translate(140, 140);
                 ctx.rotate(i * arcSize + arcSize / 2);
                 ctx.textAlign = "right";
-                let shortText = options[i].split(" (")[0].split(":")[0];
-                ctx.fillText(shortText, 110, 4);
+                ctx.fillText(options[i], 125, 6);
                 ctx.restore();
             }
         }
@@ -197,45 +263,5 @@
         drawWheel('wheel1', options1);
         drawWheel('wheel2', options2);
 
-        let currentRotation1 = 0;
-        let currentRotation2 = 0;
-        let isSpinning1 = false;
-        let isSpinning2 = false;
-
-        function spin(wheelNum) {
-            if (wheelNum === 1 && isSpinning1) return;
-            if (wheelNum === 2 && isSpinning2) return;
-
-            const options = wheelNum === 1 ? options1 : options2;
-            const canvas = document.getElementById(`wheel${wheelNum}`);
-            const resultBox = document.getElementById(`result${wheelNum}`);
-            
-            if (wheelNum === 1) isSpinning1 = true; else isSpinning2 = true;
-            resultBox.innerText = "🎲 กำลังสุ่ม...";
-
-            const numOptions = options.length;
-            const randomDegree = Math.floor(Math.random() * 360);
-            const totalSpin = 1800 + randomDegree; 
-
-            if (wheelNum === 1) {
-                currentRotation1 += totalSpin;
-                canvas.style.transform = `rotate(${currentRotation1}deg)`;
-            } else {
-                currentRotation2 += totalSpin;
-                canvas.style.transform = `rotate(${currentRotation2}deg)`;
-            }
-
-            setTimeout(() => {
-                const finalAngle = (wheelNum === 1 ? currentRotation1 : currentRotation2) % 360;
-                const arcSizeDeg = 360 / numOptions;
-                const correctedAngle = (360 - finalAngle + 270) % 360; 
-                const selectedIndex = Math.floor(correctedAngle / arcSizeDeg) % numOptions;
-
-                resultBox.innerText = "📢 " + options[selectedIndex];
-                
-                if (wheelNum === 1) isSpinning1 = false; else isSpinning2 = false;
-            }, 4000);
-        }
-    </script>
-</body>
-</html>
+        let rotations =;
+        

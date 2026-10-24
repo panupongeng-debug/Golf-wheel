@@ -201,29 +201,38 @@
         const colors = ["#00f5d4", "#7b2cbf", "#00bbf9", "#9b5de5", "#fee440", "#f15bb5", "#3a86c8", "#ff0054"];
 
         // ระบบเสียงสังเคราะห์ Web Audio API
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
         
         function playTickSound() {
+            initAudio();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.05);
+            osc.stop(audioCtx.currentTime + 0.04);
         }
 
         function playWinSound(isEpic) {
+            initAudio();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'sine';
             osc.frequency.setValueAtTime(isEpic ? 880 : 587, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(isEpic ? 1760 : 880, audioCtx.currentTime + 0.3);
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
@@ -256,16 +265,5 @@
                 ctx.restore();
             }
         }
-
-        // แก้ไขบั๊กตัวแปรตรงนี้เรียบร้อยครับ
-        let rotations =;
-        let spinning = [false, false];
-
-        drawWheel('wheel1', options1);
-        drawWheel('wheel2', options2);
-
-        function spin(wheelNum) {
-            const idx = wheelNum - 1;
-            if (spinning[idx]) return;
 
         

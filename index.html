@@ -174,7 +174,6 @@
     </div>
 
     <script>
-        // ใช้ชื่อย่อและตัดคำสั้นๆ เพื่อให้ในวงล้อใช้ฟอนต์ขนาดใหญ่พิเศษได้
         const options1 = ["SOCIAL", "HONORS", "DISHONORS", "1st GREEN", "LAST GREEN", "DRIVE ไกล", "เกมสั้นบ๊วย", "แต้มบ๊วย"];
         const fullDetails1 = {
             "SOCIAL": "Social ดื่มพร้อมกันทุกคน!",
@@ -199,10 +198,9 @@
             "MULLIGAN": "Mulligan! ถ้าหลุมนี้ตีใหม่ โดนเบิ้ล 2 เท่า 🔄"
         };
 
-        // ชุดสีพรีเมียม สลับมืดสว่างเพื่อให้มองเห็นง่าย
         const colors = ["#00f5d4", "#7b2cbf", "#00bbf9", "#9b5de5", "#fee440", "#f15bb5", "#3a86c8", "#ff0054"];
 
-        // ระบบเสียงสังเคราะห์ Web Audio API (ไม่ต้องโหลดไฟล์เสียงจากภายนอก)
+        // ระบบเสียงสังเคราะห์ Web Audio API
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
         function playTickSound() {
@@ -248,20 +246,26 @@
                 ctx.lineTo(140, 140);
                 ctx.fill();
 
-                // ปรับแต่งฟอนต์บนหน้าวงล้อให้ "ใหญ่ หนา ชัด"
                 ctx.save();
                 ctx.fillStyle = (colors[i % colors.length] === "#fee440" || colors[i % colors.length] === "#00f5d4") ? "#000000" : "#ffffff";
                 ctx.font = "bold 15px Arial";
                 ctx.translate(140, 140);
                 ctx.rotate(i * arcSize + arcSize / 2);
                 ctx.textAlign = "right";
-                ctx.fillText(options[i], 125, 6);
+                ctx.fillText(options[i], 130, 5);
                 ctx.restore();
             }
         }
 
+        // แก้ไขบั๊กตัวแปรตรงนี้เรียบร้อยครับ
+        let rotations =;
+        let spinning = [false, false];
+
         drawWheel('wheel1', options1);
         drawWheel('wheel2', options2);
 
-        let rotations =;
+        function spin(wheelNum) {
+            const idx = wheelNum - 1;
+            if (spinning[idx]) return;
+
         
